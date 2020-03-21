@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      th:with="link=@{/cliente/home}">
+<body>
+<div layout:fragment="content">
+    <form id="form" method="get" th:action="@{/cliente/search}" th:object="${searchFilter}">
+        <input id="searchType" type="hidden" th:field="*{searchType}">
+        <input id="searchIdCategoria" type="hidden" th:field="*{idCategoria}">
+        <div>
+            <h1>É Hora de Rangar!</h1>
+            <fieldset>
+                <input name="busca" th:field="*{texto}" placeholder="Buscar por ..." type="text">
+                <input type="button" onclick="searchRestaurante(null)" value="Buscar">
+            </fieldset>
+        </div>
+        <div class="divCategoriasComida">
+            <div th:each="categoria: ${categorias}" class="divCategoriasComidaOpcao">
+                <a href="#" th:onclick="'searchRestaurante(' + ${categoria.id} + ')'">
+                    <img class="imgCategoriaComida"
+                         th:with="imgSrc=${'/images/categoria/'+categoria.imagem}"
+                         th:src="${imgSrc}"><br/>
+                    <span th:text="${categoria.nome}"></span>
+                </a>
+            </div>
+        </div>
+    </form>
+    <div th:if="${pedidos.size() > 0}">
+        <h1>Últimos pedidos</h1>
+        <div th:each="pedido: ${pedidos}">
+            <input type="button" th:value="${pedido.formattedId} + ' ' + ${pedido.restaurante.nome}"
+                   th:onclick="'location.href=\''+ @{/cliente/pedido/view} + '?pedidoId=' +${pedido.id}+'\''"><br/>
+        </div>
+    </div>
+    <div>
+        <h1>Conta</h1>
+        <input type="button" value="Meus Dados" th:onclick="'location.href=\''+@{/cliente/edit}+'\';'"><br/>
+        <input type="button" value="Sair" th:onclick="'location.href=\''+@{/logout}+'\';'"><br/>
+    </div>
+</div>
+</body>
+</html>

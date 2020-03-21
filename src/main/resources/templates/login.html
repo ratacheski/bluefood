@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <div>
+        <img class="imgIconeUsuario" th:src="@{/images/bf_iconeUsuario.png}"/>
+        <h1>Autenticação</h1>
+        <form th:action="@{/login}" method="post">
+            <fieldset>
+                <input name="username" placeholder="E-mail" type="text"/><br/>
+                <input name="password" placeholder="Senha" type="password"/><br/>
+                <input type="submit" value="Entrar"/><br/>
+            </fieldset>
+        </form>
+        <br/>
+
+        <div th:if="${msg != null}" class="msgErro">
+            <span th:text="${msg}"></span>
+        </div>
+        <br/>
+        <form method="get" th:action="@{/public/cliente/new}">
+            <input type="submit" value="Cadastrar Cliente"/>
+        </form>
+        <br/>
+        <form method="get" th:action="@{/public/restaurante/new}">
+            <input type="submit" value="Cadastrar Restaurante"/>
+        </form>
+    </div>
+</div>
+</body>
+</html>

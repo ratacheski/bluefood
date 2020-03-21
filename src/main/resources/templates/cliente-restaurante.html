@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      th:with="link=@{/cliente/home}">
+<body>
+<div layout:fragment="content">
+    <div>
+        <img class="imgRestauranteOpcao"
+             th:with="logoSrc=${'/images/logotipo/'+restaurante.logotipo}"
+             th:src="${logoSrc}"><br>
+        <span class="nomeRestauranteOpcao" th:text="${restaurante.nome}"></span><br>
+        <span th:text="${restaurante.categoriasAsText}"></span><br/>
+        <span th:text="'Tempo médio de entrega: ' +${restaurante.calculateTempoEntrega(cep)} + ' min.'"></span><br/>
+        <span th:text="'Taxa de Entrega: ' + ${#numbers.formatCurrency(restaurante.taxaEntrega)}"></span><br>
+    </div>
+    <div>
+        <h1>Opções</h1>
+        <form id="filterForm" method="get" th:action="@{/cliente/restaurante}">
+            <input type="hidden" name="restauranteId" th:value="${restaurante.id}">
+            <input type="hidden" id="categoria" name="categoria">
+            <fieldset>
+                <legend>Filtros</legend>
+                <div class="filtroCategoriasRestaurante" th:each="categoria : ${categorias}">
+                    <input type="button"
+                           th:id="${categoria == categoriaSelecionada} ? 'inputSelecionado' : ''"
+                           th:value="${categoria}"
+                           th:data-categoria="${categoria}"
+                           onclick="filterCardapio(this.getAttribute('data-categoria'))">
+                </div>
+            </fieldset>
+        </form>
+        <br>
+    </div>
+    <div th:if="${itensDestaque.size() > 0 }">
+        <h1>Destaques</h1>
+    </div>
+    <div class="divRestauranteOpcao" th:each="item: ${itensDestaque}">
+
+        <img class="imgRestauranteOpcao"
+             th:with="comidaSrc=${'/images/comida/'+item.imagem}"
+             th:src="${comidaSrc}">
+        <br>
+        <span th:text="${item.nome}"></span><br/>
+        <span th:text="${item.descricao}"></span><br/>
+        <span th:text="${#numbers.formatCurrency(item.preco)}"></span><br>
+        <form method="get" th:action="@{/cliente/carrinho/adicionar}">
+            <input type="hidden" name="itemId" th:value="${item.id}"/>
+            <label for="quantidade">Quantidade: </label><br/>
+            <select id="quantidade" name="quantidade">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+            </select><br/><br/>
+            Observações:
+            <br/>
+            <textarea name="observacoes"></textarea>
+            <br/><br/>
+            <input type="submit" value="Adicionar ao carrinho"/>
+        </form>
+    </div>
+
+    <div class="divRestauranteOpcao" th:each="item: ${itens}">
+        <div>
+            <h1>Menu</h1>
+        </div>
+        <img class="imgRestauranteOpcao"
+             th:with="comidaSrc=${'/images/comida/'+item.imagem}"
+             th:src="${comidaSrc}">
+        <br>
+        <span th:text="${item.nome}"></span><br/>
+        <span th:text="${item.descricao}"></span><br/>
+        <span th:text="${#numbers.formatCurrency(item.preco)}"></span><br>
+        <form method="get" th:action="@{/cliente/carrinho/adicionar}">
+            <input type="hidden" name="itemId" th:value="${item.id}"/>
+            <label for="quantidade2">Quantidade: </label><br>
+            <select id="quantidade2" name="quantidade">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+            </select><br><br>
+            Observações:
+            <br>
+            <textarea name="observacoes"></textarea>
+            <br><br>
+            <input type="submit" value="Adicionar ao carrinho">
+        </form>
+    </div>
+    <input type="button" value="Voltar" th:onclick="'location.href=\'' + @{/cliente/home} + '\';'">
+</div>
+</body>
+</html>

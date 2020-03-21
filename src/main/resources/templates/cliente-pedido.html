@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      th:with="link=@{/cliente/home}">
+<body>
+<div layout:fragment="content">
+    <div>
+        <h1>Seu Pedido</h1>
+        <input type="button" value="Refazer Pedido"
+               th:onclick="'location.href=\''+@{/cliente/carrinho/refazer-pedido}+ '?pedidoId=' + ${pedido.id} +'\';'">
+    </div>
+    <br><br>
+    <div class="msgSucesso">
+        <span th:text="'Status: ' +${pedido.statusPedido.descricao}"></span>
+    </div>
+    <br><br>
+    <img th:with="logoSrc=${'/images/logotipo/'+pedido.restaurante.logotipo}"
+         th:src="${logoSrc}"
+         class="imgRestauranteOpcao">
+    <br><br>
+    <div th:each="item: ${pedido.itensPedido}">
+        <span th:text="${item.itemCardapio.nome}"></span><br>
+        <span th:text="'Qtd: '+${item.quantidade}"></span><br>
+        <div th:if="${item.observacoes} != ''">
+            <span th:text="${item.observacoes}"></span><br/>
+        </div>
+        <span th:text="${#numbers.formatCurrency(item.preco)}"></span><br><br>
+    </div>
+
+    <div>
+        <span>Taxa de Entrega</span><br>
+        <span th:text="${#numbers.formatCurrency(pedido.taxaEntrega)}"></span><br>
+    </div>
+    <br>
+
+    <div>
+        <span>Total</span><br>
+        <span th:text="${#numbers.formatCurrency(pedido.total)}"></span><br>
+    </div>
+    <br>
+
+
+    <div>
+        <input type="button" value="Voltar" th:onclick="'location.href=\'' + @{/cliente/home} + '\''">
+    </div>
+</div>
+</body>
+</html>

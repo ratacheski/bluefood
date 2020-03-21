@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      th:with="link=@{/cliente/home}">
+<body>
+<div layout:fragment="content">
+    <form id="form" method="get" th:action="@{/cliente/search}" th:object="${searchFilter}">
+        <input id="searchType" type="hidden" th:field="*{searchType}">
+        <input id="searchIdCategoria" type="hidden" th:field="*{idCategoria}">
+        <input id="entregaGratis" type="hidden" th:field="*{entregaGratis}">
+        <input id="order" type="hidden" th:field="*{order}">
+        <input id="asc" type="hidden" th:field="*{asc}">
+        <input id="cmd" type="hidden" name="cmd">
+        <div>
+            <h1>É Hora de Rangar!</h1>
+            <fieldset>
+                <label>
+                    <input name="busca" th:field="*{texto}" placeholder="Buscar por ..." type="text">
+                </label>
+                <input type="button" onclick="searchRestaurante(null)" value="Buscar">
+            </fieldset>
+        </div>
+        <div class="divCategoriasComida">
+            <div th:each="categoria: ${categorias}" class="divCategoriasComidaOpcao">
+                <a href="#" th:onclick="'searchRestaurante(' + ${categoria.id} + ')'">
+                    <img class="imgCategoriaComida"
+                         th:with="imgSrc=${'/images/categoria/'+categoria.imagem}"
+                         th:src="${imgSrc}"
+                         th:alt="${categoria.nome}"><br/>
+                    <span th:text="${categoria.nome}"></span>
+                </a>
+            </div>
+        </div>
+        <div>
+            <h1>Resultados</h1>
+            <fieldset>
+                <legend>Filtros</legend>
+                <input type="button"
+                       value="Entrega Grátis"
+                       th:id="*{entregaGratis} ? 'inputSelecionado' : ''"
+                       onclick="setCmd('ENTREGA_GRATIS')"><br/>
+                <input type="button"
+                       value="Maior Taxa de Entrega"
+                       th:id="(*{order.name()} == 'TAXA' and !*{asc} ? 'inputSelecionado' : '')"
+                       onclick="setCmd('MAIOR_TAXA')">
+                <input type="button"
+                       value="Menor Taxa de Entrega"
+                       th:id="(*{order.name()} == 'TAXA' and *{asc} ? 'inputSelecionado' : '')"
+                       onclick="setCmd('MENOR_TAXA')"/><br>
+                <input type="button"
+                       value="Maior Tempo de Entrega"
+                       th:id="(*{order.name()} == 'TEMPO' and !*{asc} ? 'inputSelecionado' : '')"
+                       onclick="setCmd('MAIOR_TEMPO')"/>
+                <input type="button"
+                       value="Menor Tempo de Entrega"
+                       th:id="(*{order.name()} == 'TEMPO' and *{asc} ? 'inputSelecionado' : '')"
+                       onclick="setCmd('MENOR_TEMPO')"/><br>
+            </fieldset>
+        </div>
+    </form>
+    <br>
+    <div th:each="restaurante: ${restaurantes}" class="divRestauranteOpcao">
+        <a th:href="@{/cliente/restaurante(restauranteId=${restaurante.id})}">
+            <img class="imgRestauranteOpcao"
+                 th:with="logoSrc=${'/images/logotipo/'+restaurante.logotipo}"
+                 th:src="${logoSrc}"><br>
+            <span class="nomeRestauranteOpcao" th:text="${restaurante.nome}"></span><br>
+            <span th:text="${restaurante.categoriasAsText}"></span><br>
+            <span th:text="'Tempo médio de entrega: ' +${restaurante.calculateTempoEntrega(cep)} + ' min.'"></span><br/>
+            <span th:text="'Taxa de Entrega: ' + ${#numbers.formatCurrency(restaurante.taxaEntrega)}"></span><br/>
+        </a>
+        <br/><br/>
+    </div>
+    <div th:if="${restaurantes.size() == 0}">
+        <span>Nenhum Restaurante Encontrado</span>
+        <br/>
+    </div>
+    <br/>
+    <input type="button" value="Voltar"
+           th:onclick="'location.href=\''+ @{/cliente/home} + '\''">
+</div>
+</body>
+</html>

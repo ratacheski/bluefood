@@ -1,0 +1,28 @@
+{
+  "properties": [
+    {
+      "name": "bluefood.files.logotipo",
+      "type": "java.lang.String",
+      "description": "Description for bluefood.files.logotipo."
+    },
+    {
+      "name": "bluefood.files.comida",
+      "type": "java.lang.String",
+      "description": "Description for bluefood.files.comida."
+    },
+    {
+      "name": "bluefood.files.categoria",
+      "type": "java.lang.String",
+      "description": "Description for bluefood.files.categoria."
+    },
+    {
+      "name": "bluefood.sbpay.url",
+      "type": "java.lang.String",
+      "description": "Description for bluefood.sbpay.url."
+    },
+    {
+      "name": "bluefood.sbpay.token",
+      "type": "java.lang.String",
+      "description": "Description for bluefood.sbpay.token."
+    }
+  ] }
